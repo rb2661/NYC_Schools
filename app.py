@@ -18,11 +18,17 @@ app.layout = html.Div([
 
     html.Div([
         html.H1('NYC High School Demographics'),
-        html.P('Select a demographic:'),
+        html.P('Select a demographic and year:'),
         dcc.Dropdown(
             id='demographic',
             options=['Graduation Rate', 'Asian %', 'Hispanic %', 'Black %', 'Poverty %'],
             value='Graduation Rate'
+            ),
+        dcc.RadioItems(
+                id='year',
+                options=[2013, 2014, 2015, 2016, 2017],
+                value=2017,
+                inline=True
             )
     ], style={'width': '60%', 'display': 'inline-block'}),
 
@@ -38,9 +44,10 @@ app.layout = html.Div([
 
 @app.callback(
     Output('map', 'figure'),
-    Input('demographic', 'value'))
-def display_choropleth(demographic):
-    df = zip_means
+    Input('demographic', 'value'),
+    Input('year', 'value'))
+def display_choropleth(demographic, year):
+    df = zip_means[zip_means['Cohort Year'] == year]
     geojson = zip_geos
     fig = px.choropleth_mapbox(df, geojson=geojson, color=demographic,
                            locations='Zipcode', featureidkey='properties.ZIPCODE',
@@ -69,12 +76,14 @@ def display_zip_code(clickData):
 @app.callback(
     Output('schools_table', 'children'),
     Input('map', 'clickData'),
-    Input('demographic', 'value'))
-def display_school_table(clickData, demographic):
+    Input('demographic', 'value'),
+    Input('year', 'value'))
+def display_school_table(clickData, demographic, year):
     schools2 = schools[schools['Zipcode'] == clickData['points'][0]['location']]
-    schools3 = schools2[['School Name', demographic]]
-    columns = [{"name": i, "id": i, } for i in schools3.columns]
-    df_data = schools3.to_dict('records')
+    schools3 = schools2[schools2['Cohort Year'] == year]
+    schools4 = schools3[['School Name', demographic]]
+    columns = [{"name": i, "id": i, } for i in schools4.columns]
+    df_data = schools4.to_dict('records')
 
     schooltable = dash_table.DataTable(
         data=df_data,

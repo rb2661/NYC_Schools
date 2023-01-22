@@ -26,7 +26,7 @@ schools.loc[schools['school_name'] == 'Art and Design High School', 'postcode'] 
 schools_grad = pd.read_csv('data/2016-2017_Graduation_Outcomes_School.csv')
 
 cohort_mask = schools_grad['Cohort'] == '4 year June'
-year_mask = schools_grad['Cohort Year'] == 2013
+year_mask = schools_grad['Cohort Year'] >= 2009
 type_mask = schools_grad['Demographic Category'] == 'All Students'
 
 schools_grad2 = schools_grad[cohort_mask][year_mask][type_mask]
@@ -37,13 +37,18 @@ schools_full = schools.merge(schools_grad2, left_on='dbn', right_on='DBN')
 
 schools_demo = pd.read_csv('data/2013_-_2018_Demographic_Snapshot_School.csv')
 
-year_mask2 = schools_demo['Year'] == '2016-17'
+#year_mask2 = schools_demo['Year'] == '2016-17'
 
-schools_demo2 = schools_demo[year_mask2]
+#schools_demo2 = schools_demo[year_mask2]
 
-# join
+#changing year format to be joinable
+schools_demo['Year'] = schools_demo['Year'].str[:-3]
 
-schools_full2 = schools_full.merge(schools_demo2, left_on='dbn', right_on='DBN')
+schools_demo['Year'] = schools_demo['Year'].apply(pd.to_numeric)
+
+schools_full['Cohort Year'] = schools_full['Cohort Year'] + 4
+
+schools_full2 = schools_full.merge(schools_demo, left_on=['dbn', 'Cohort Year'], right_on=['DBN', 'Year'])
 
 fig = px.scatter(schools_full2, x='Total Grads % of cohort', y='% Poverty', size='Total Cohort #', color='Borough')
 
@@ -98,13 +103,14 @@ nyc_geo = nyc_zip.merge(schools_final, how='outer', left_on='ZIPCODE', right_on=
 
 nyc_geo.ZIPCODE.value_counts().plot(kind='barh', figsize=(20,16))
 
-mean_values = nyc_geo[['ZIPCODE', 'Total Cohort #', 'Total Grads #', 'Total Grads % of cohort', '# Female', '% Female',
-       '# Male', '% Male', '# Asian', '% Asian', '# Black', '% Black', '# Hispanic', '% Hispanic', '# Poverty', '% Poverty']].groupby('ZIPCODE').mean()
+mean_values = nyc_geo[['ZIPCODE', 'Cohort Year', 'Total Cohort #', 'Total Grads #', 'Total Grads % of cohort', '# Female', '% Female',
+       '# Male', '% Male', '# Asian', '% Asian', '# Black', '% Black', '# Hispanic', '% Hispanic', '# Poverty', '% Poverty']].groupby(['ZIPCODE', 'Cohort Year']).mean()
 
-cols = ['mean cohort #', 'mean grad #', 'mean grad %', 'mean female #', 'mean female %', 'mean male #', 'mean male %', 'mean asian #', 'mean asian %', 
+cols = ['mean cohort #', 'mean grad #', 'mean grad %', 'mean female #', 'mean female %', 'mean male #', 'mean male %', 'mean asian #', 'mean asian %',
         'mean black #', 'mean black %', 'mean hispanic #', 'mean hispanic %', 'mean poverty #', 'mean poverty %']
 
 mean_values.columns = cols
+mean_values = mean_values.reset_index()
 
 zip_means = nyc_geo[['ZIPCODE', 'geometry']].merge(mean_values, left_on = 'ZIPCODE', right_on = 'ZIPCODE')
 
@@ -213,7 +219,7 @@ nyc_zip_map.save("figures/nyc_zip_map.html")
 
 #print(zip_means.columns)
 
-zip_new_cols = ['Zipcode', 'geometry', 'Graduating Cohort', 'Graduates', 'Graduation Rate',
+zip_new_cols = ['Zipcode', 'geometry', 'Cohort Year', 'Graduating Cohort', 'Graduates', 'Graduation Rate',
                 'Female Student Count', 'Female %', 'Male Student Count', 'Male %',
                 'Asian Student Count', 'Asian %', 'Black Student Count', 'Black %',
                 'Hispanic Student Count', 'Hispanic %', 'Students in Poverty Count', 'Poverty %']
