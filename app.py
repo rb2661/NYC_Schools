@@ -36,6 +36,9 @@ app.layout = html.Div([
         dcc.Graph(id='map')
     ],  style={'width': '60%', 'display': 'inline-block', 'padding': '0 20'}),
     html.Div([
+        dcc.Graph(id='time-series')
+    ], style={'display': 'inline-block', 'float': 'right', 'width': '40%'}),
+    html.Div([
         html.H2('Selected Zip Code:', style={'textAlign': 'center'}),
         html.H4(id='zip_code', style={'textAlign': 'center'}),
         html.H4(id='schools_table')
@@ -115,7 +118,24 @@ def display_school_table(clickData, demographic, year):
 
     return schooltable
 
+@app.callback(
+    Output('time-series', 'figure'),
+    Input('map', 'clickData'),
+    Input('demographic', 'value'))
+def time_series_plot(clickData, demographic):
+    schools2 = schools[schools['Zipcode'] == clickData['points'][0]['location']]
+    schools3 = schools2[['School Name', 'Cohort Year', demographic]]
+    schools4 = schools3.sort_values(by=['School Name', 'Cohort Year'], ascending=[True, True])
+    fig = px.line(schools4, x='Cohort Year', y=demographic, color='School Name',
+                  title='School Demographics by Year', markers=True)
+    fig.update_layout(showlegend=False)
+    fig.update_xaxes(nticks=5)
+    fig.add_annotation(x=0, y=0.85, xanchor='left', yanchor='bottom',
+                       xref='paper', yref='paper', showarrow=False, align='left', text='')
 
+    fig.update_layout(height=500, margin={'l': 10, 'b': 10, 'r': 10, 't': 40})
+
+    return fig
 # hover barchart
 '''
 def display_hover(hoverData):
