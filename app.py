@@ -126,6 +126,7 @@ def time_series_plot(clickData, demographic):
     schools2 = schools[schools['Zipcode'] == clickData['points'][0]['location']]
     schools3 = schools2[['School Name', 'Cohort Year', demographic]]
     schools4 = schools3.sort_values(by=['School Name', 'Cohort Year'], ascending=[True, True])
+#    schools4.dropna(inplace=True)
     fig = px.line(schools4, x='Cohort Year', y=demographic, color='School Name',
                   title='School Demographics by Year', markers=True)
     fig.update_layout(showlegend=False)

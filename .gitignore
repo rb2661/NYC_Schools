@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Heroku Deployment
+*.pyc
+.DS_Store
+
 # C extensions
 *.so
 

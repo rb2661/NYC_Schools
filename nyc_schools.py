@@ -212,7 +212,7 @@ for i in range(0,len(schools_final)):
 
 folium.LayerControl().add_to(nyc_zip_map)
 
-nyc_zip_map.save("figures/nyc_zip_map.html")
+#nyc_zip_map.save("figures/nyc_zip_map.html")
 #webbrowser.open("figures/nyc_zip_map.html")
 
 # save dataframes into csv files for use in app.py
