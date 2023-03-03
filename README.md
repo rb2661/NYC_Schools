@@ -1,4 +1,5 @@
 # NYC Schools
+Built using Python's Dash library
  
 A dashboard for visualizing data about NYC High Schools.
 
