@@ -13,7 +13,7 @@ This dashboard utilizes data from 4 sources:
 
 The first 3 files can all be found on NYC Open Data.
 
-I chose to utilize pre-pandemic data because I wanted to get a sense of trends without the disruption of that external factor.
+I chose to utilize pre-pandemic data because I wanted to get a sense of how each variable was trending without the disruption of the external factor of COVID-19.
 
 How to use this dashboard:
 
