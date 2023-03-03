@@ -2,6 +2,8 @@
  
 A dashboard for visualizing data about NYC High Schools.
 
+A live version of this dashboard can be found at https://rb2661.pythonanywhere.com
+
 This dashboard utilizes data from 4 sources:
 
 1. NYC Department of Education HS Directory
