@@ -1,6 +1,6 @@
 # NYC Schools
  
-A dashboard for visualizing data about NYC High Schools.
+A dashboard for visualizing data about NYC High Schools, built using Python's Dash library.
 
 A live version of this dashboard can be found at https://rb2661.pythonanywhere.com
 
