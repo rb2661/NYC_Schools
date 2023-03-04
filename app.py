@@ -18,6 +18,12 @@ app.layout = html.Div([
 
     html.Div([
         html.H1('NYC High School Demographics'),
+        html.P(
+            children=[
+                'by Rory Butler - roryb102@gmail.com - ',
+                dcc.Link(
+                    href='https://github.com/rb2661/NYC_Schools'
+                )], style={'font-size': 12}),
         html.P('Select a demographic and year to update the map of NYC'),
         html.P('Click on a zip code to see data specific to schools in that zip code'),
         dcc.Dropdown(
@@ -43,6 +49,7 @@ app.layout = html.Div([
         html.H2('Selected Zip Code:', style={'textAlign': 'center'}),
         html.H4(id='zip_code', style={'textAlign': 'center'}),
         dcc.Graph(id='time-series'),
+        html.P('The table lists the schools\' demographic data for the selected year only', style={'textAlign': 'center'}),
         html.H4(id='schools_table')
     ], style={'display': 'inline-block', 'float': 'right', 'width': '40%', 'font-family': 'Helvetica'}),
 
@@ -59,7 +66,8 @@ def display_choropleth(demographic, year):
     fig = px.choropleth_mapbox(df, geojson=geojson, color=demographic,
                                locations='Zipcode', featureidkey='properties.ZIPCODE',
                                center={'lat': 40.7128, 'lon': -74.0060},
-                               mapbox_style='carto-positron', zoom=9)
+                               mapbox_style='carto-positron', zoom=9,
+                               color_continuous_scale='haline')
     fig.update_layout(margin={'r': 0, 't': 0, 'l': 0, 'b': 0}, height=700)
 
     # add school points
