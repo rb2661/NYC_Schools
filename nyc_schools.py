@@ -1,5 +1,6 @@
 import pandas as pd
 import geopandas as gpd
+import numpy as np
 
 # dataset containing all high schools in NYC
 schools = pd.read_csv('data/2021_DOE_High_School_Directory.csv')
@@ -39,7 +40,7 @@ schools_full2 = schools_full.merge(schools_demo, left_on=['dbn', 'Cohort Year'],
 
 schools_full2['postcode'] = schools_full2['postcode'].apply(lambda x: str(x).replace(",", ""))
 
-schools_final = schools_full2[['dbn', 'school_name', 'Borough', 'Latitude', 'Longitude', 'url', 'total_students',
+schools_full3 = schools_full2[['dbn', 'school_name', 'Borough', 'Latitude', 'Longitude', 'url', 'total_students',
                                'graduation_rate', 'attendance_rate', 'NTA', 'postcode', 'Cohort Year', 'Total Cohort #',
                                'Total Grads #', 'Total Grads % of cohort', '# Female', '% Female', '# Male', '% Male',
                                '# Asian', '% Asian', '# Black', '% Black', '# Hispanic', '% Hispanic', '# Poverty',
@@ -55,7 +56,7 @@ zips = nyc_zip['ZIPCODE'].value_counts()
 # Some zip code polygons have duplicate rows. I kept the first row for each that appeared.
 nyc_zip.drop([109, 113, 114, 146, 149, 259, 27, 28, 123, 246, 19, 253, 241, 194, 144], inplace=True)
 
-nyc_geo = nyc_zip.merge(schools_final, how='outer', left_on='ZIPCODE', right_on='postcode')
+nyc_geo = nyc_zip.merge(schools_full3, how='outer', left_on='ZIPCODE', right_on='postcode')
 
 # nyc_geo.ZIPCODE.value_counts().plot(kind='barh', figsize=(20,16))
 
@@ -95,12 +96,60 @@ schools_new_cols = ['dbn', 'School Name', 'Borough', 'Latitude', 'Longitude', 'u
                     'Asian Student Count', 'Asian %', 'Black Student Count', 'Black %',
                     'Hispanic Student Count', 'Hispanic %', 'Students in Poverty Count', 'Poverty %']
 
-schools_final.columns = schools_new_cols
+schools_full3.columns = schools_new_cols
 
 zip_means.to_csv('data/zip_means.csv')
+zip_geos.to_file('data/zip_geos.json', driver='GeoJSON')
+
+# school district geojson & data wrangling
+
+school_districts = gpd.read_file('data/school_districts.geojson')
+nyc_districts = school_districts[['school_dist', 'geometry']]
+
+# district 10 appears twice, dropping the first instance
+nyc_districts2 = nyc_districts.drop([32])
+
+nyc_districts2.to_file('data/district_geos.json', driver='GeoJSON')
+
+#avoid settingwithcopy warning
+schools_final = schools_full3.copy()
+
+schools_final.loc[:, 'school_dist'] = schools_final.loc[:, 'dbn'].astype(str).str[:2]
+
+schools_final['school_dist'] = np.where(schools_final['school_dist'].str[0] == '0',
+                                        schools_final['school_dist'].str[1],
+                                        schools_final['school_dist'])
+
+#print(schools_final[['school_dist']].head())
+
 schools_final.to_csv('data/schools_final.csv')
 
-zip_geos.to_file('data/zip_geos.json', driver='GeoJSON')
+# getting means for school districts
+districts_geo = nyc_districts2.merge(schools_final, how='outer', left_on='school_dist', right_on='school_dist')
+
+#districts_geo.to_csv('data/districts_geo.csv')
+
+
+district_means = districts_geo[['school_dist', 'Cohort Year', 'Graduating Cohort', 'Graduates', 'Graduation Rate',
+                                'Female Student Count', 'Female %', 'Male Student Count', 'Male %',
+                                'Asian Student Count', 'Asian %', 'Black Student Count', 'Black %',
+                                'Hispanic Student Count', 'Hispanic %', 'Students in Poverty Count',
+                                'Poverty %']].groupby(['school_dist', 'Cohort Year']).mean()
+
+district_means = district_means.reset_index()
+
+district_means2 = districts_geo[['school_dist', 'geometry']].merge(district_means,
+                                                                   left_on='school_dist', right_on='school_dist')
+
+district_means2.drop_duplicates(inplace=True)
+
+district_means2.to_csv('data/district_means.csv')
+
+district_means_gdf = gpd.GeoDataFrame(district_means2, crs='EPSG:4326', geometry=district_means2.geometry)
+
+district_means_geo = district_means_gdf[['school_dist', 'geometry']]
+
+district_means_geo.to_file('data/district_means_geos.json', driver='GeoJSON')
 
 # Art and Design High School -- wrong postal code: change from 10019 to 10022
 # Eagle Academy for Young Men of Staten Island, The - no data in grad rate dataset
