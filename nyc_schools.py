@@ -120,15 +120,10 @@ schools_final['school_dist'] = np.where(schools_final['school_dist'].str[0] == '
                                         schools_final['school_dist'].str[1],
                                         schools_final['school_dist'])
 
-#print(schools_final[['school_dist']].head())
-
 schools_final.to_csv('data/schools_final.csv')
 
 # getting means for school districts
 districts_geo = nyc_districts2.merge(schools_final, how='outer', left_on='school_dist', right_on='school_dist')
-
-#districts_geo.to_csv('data/districts_geo.csv')
-
 
 district_means = districts_geo[['school_dist', 'Cohort Year', 'Graduating Cohort', 'Graduates', 'Graduation Rate',
                                 'Female Student Count', 'Female %', 'Male Student Count', 'Male %',
@@ -145,11 +140,9 @@ district_means2.drop_duplicates(inplace=True)
 
 district_means2.to_csv('data/district_means.csv')
 
-district_means_gdf = gpd.GeoDataFrame(district_means2, crs='EPSG:4326', geometry=district_means2.geometry)
-
-district_means_geo = district_means_gdf[['school_dist', 'geometry']]
-
-district_means_geo.to_file('data/district_means_geos.json', driver='GeoJSON')
+#district_means_gdf = gpd.GeoDataFrame(district_means2, crs='EPSG:4326', geometry=district_means2.geometry)
+#district_means_geo = district_means_gdf[['school_dist', 'geometry']]
+#district_means_geo.to_file('data/district_means_geos.json', driver='GeoJSON')
 
 # Art and Design High School -- wrong postal code: change from 10019 to 10022
 # Eagle Academy for Young Men of Staten Island, The - no data in grad rate dataset

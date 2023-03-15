@@ -148,6 +148,7 @@ def display_school_table(clickData, regions, demographic, year):
         data=df_data,
         columns=columns,
         sort_action='native',
+        sort_by=[{'column_id': demographic, 'direction': 'desc'}],
         style_table={'overflowX': 'auto'},
         style_header={
             'fontWeight': 'bold',
