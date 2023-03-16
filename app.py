@@ -44,33 +44,31 @@ app.layout = html.Div([
                 dcc.Link(
                     href='https://github.com/rb2661/NYC_Schools'
                 )], style={'font-size': 12}),
-        html.P('Select a demographic and year to update the map of NYC'),
         html.P('You have the option to view NYC by School Districts or Zip Codes'),
+        html.P('Select a demographic (e.g. Graduation Rate) and year to update the map of NYC'),
+        html.P('Demographics include Graduation Rate and student percentages of ethnicities or poverty'),
         html.P('Click on the map to see data specific to schools in that region'),
+
+    ], style={'width': '60%', 'display': 'inline-block', 'font-family': 'Helvetica'}),
+
+    html.Div([
         dcc.Dropdown(
             id='regions',
             options=['School Districts', 'Zip Codes'],
             value=list(dict_geos.keys())[0]
-            ),
+        ),
         dcc.Dropdown(
             id='demographic',
             options=['Graduation Rate', 'Asian %', 'Hispanic %', 'Black %', 'Poverty %'],
             value='Graduation Rate'
-            ),
+        ),
         dcc.RadioItems(
-                id='year',
-                options=[2013, 2014, 2015, 2016, 2017],
-                value=2017,
-                inline=True
-            )
-    ], style={'width': '60%', 'display': 'inline-block', 'font-family': 'Helvetica'}),
+            id='year',
+            options=[2013, 2014, 2015, 2016, 2017],
+            value=2017,
+            inline=True
+        )], style={'width': '60%', 'display': 'inline-block', 'font-family': 'Helvetica'}),
 
-    html.Div(
-        dcc.Loading(id='loading-graph',
-                    children=[html.Div([dcc.Graph(id='map')])],
-                    type='default'
-                    ),
-        style={'width': '60%', 'display': 'inline-block', 'padding': '0 10'}),
     html.Div([
         html.H2('Selected School District or Zip Code:', style={'textAlign': 'center'}),
         html.H4(id='location_code', style={'textAlign': 'center'}),
@@ -79,6 +77,12 @@ app.layout = html.Div([
         html.H4(id='schools_table')
     ], style={'display': 'inline-block', 'float': 'right', 'width': '40%', 'font-family': 'Helvetica'}),
 
+    html.Div(
+        dcc.Loading(id='loading-graph',
+                    children=[html.Div([dcc.Graph(id='map')])],
+                    type='default'
+                    ),
+        style={'width': '60%', 'display': 'inline-block', 'padding': '0 10'}),
 ])
 
 
@@ -188,8 +192,9 @@ def time_series_plot(clickData, regions, demographic):
     schools4 = schools3.sort_values(by=['School Name', 'Cohort Year'], ascending=[True, True])
 
     fig = px.line(schools4, x='Cohort Year', y=demographic, color='School Name',
-                  title='School Demographic by Year', markers=True)
-    fig.update_layout(showlegend=False, title_x=0.5)
+                  title='School Demographic by Year', markers=True, template='simple_white')
+    fig.update_layout(showlegend=False, title_x=0.5, plot_bgcolor='aliceblue')
+    fig.update_yaxes(showgrid=True, gridcolor='lightgray')
     fig.update_xaxes(nticks=5)
     fig.add_annotation(x=0, y=0.85, xanchor='left', yanchor='bottom',
                        xref='paper', yref='paper', showarrow=False, align='left', text='')
