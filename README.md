@@ -12,7 +12,7 @@ This dashboard utilizes data from 5 sources:
 4. [GeoJSON file of NYC School Districts](https://data.cityofnewyork.us/Education/School-Districts/r8nu-ymqj)
 5. [GeoJSON file of NYC Zip Codes](https://data.cityofnewyork.us/widgets/i8iw-xf4u)
 
-All files can be found on NYC Open Data links provided.
+All files can be found at the NYC Open Data links provided.
 
 I chose to utilize pre-pandemic data because I wanted to get a sense of how each variable was trending without the disruption of the external factor of COVID-19.
 
