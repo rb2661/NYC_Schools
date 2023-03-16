@@ -20,7 +20,7 @@ Data from the first 3 sources was wrangled and combined together, to be able to 
 
 How to use this dashboard:
 
-Utilize the drop-down menu to select a demographic variable related to NYC High Schools that you're interested in investigating. Select a year from the radio buttons to see data specific to that year.
+The first drop-down menu allows you to view NYC broken up either by school districts or zip codes. The second the drop-down menu is to select a demographic variable related to NYC High Schools that you're interested in investigating. Select a year from the radio buttons to see data specific to that year.
 
 Hovering your mouse on the map gives you the identifier for each school district or zip code and the associated statistic for High Schools in that region in the given year.
 
