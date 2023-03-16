@@ -24,4 +24,4 @@ The first drop-down menu allows you to view NYC broken up either by school distr
 
 Hovering your mouse on the map gives you the identifier for each school district or zip code and the associated statistic for High Schools in that region in the given year.
 
-Clicking on a region populates a line graph and table on the right-hand side of the dashboard. The line graph illustrates data for each school in the given region, over all 5 years of data in the dashboard. The table highlights the value of the chosen variable of interest only for each school, only on the year chosen in the radio buttons.
+Clicking on a region populates a line graph and table on the right-hand side of the dashboard. The line graph illustrates data for each school in the given region, over all 5 years of data in the dashboard. The table highlights the value of the chosen variable of interest for each school, only on the year chosen in the radio buttons.
