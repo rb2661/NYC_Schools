@@ -4,14 +4,15 @@ A dashboard for visualizing data about NYC High Schools, built using Python's Da
 
 A live version of this dashboard can be found at https://rb2661.pythonanywhere.com
 
-This dashboard utilizes data from 4 sources:
+This dashboard utilizes data from 5 sources:
 
-1. NYC Department of Education HS Directory
+1. [NYC Department of Education HS Directory](https://data.cityofnewyork.us/Education/2021-DOE-High-School-Directory/8b6c-7uty)
 2. [2016-17 NYC Graduation Outcomes by School](https://data.cityofnewyork.us/Education/2016-2017-Graduation-Outcomes-School/nb39-jx2v)
-3. 2013-2018 NYC Demographic School Snapshots
-4. GeoJSON file of NYC Zip Codes
+3. [2013-2018 NYC Demographic School Snapshots](https://data.cityofnewyork.us/Education/2013-2018-Demographic-Snapshot-School/s52a-8aq6)
+4. [GeoJSON file of NYC School Districts](https://data.cityofnewyork.us/Education/School-Districts/r8nu-ymqj)
+5. [GeoJSON file of NYC Zip Codes](https://data.cityofnewyork.us/widgets/i8iw-xf4u)
 
-The first 3 files can all be found on NYC Open Data.
+All files can be found on NYC Open Data links provided.
 
 I chose to utilize pre-pandemic data because I wanted to get a sense of how each variable was trending without the disruption of the external factor of COVID-19.
 
