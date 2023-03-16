@@ -16,10 +16,12 @@ All files can be found at the NYC Open Data links provided.
 
 I chose to utilize pre-pandemic data because I wanted to get a sense of how each variable was trending without the disruption of the external factor of COVID-19.
 
+Data from the first 3 sources was wrangled and combined together, to be able to observe aggregate data across a school district or zip code.
+
 How to use this dashboard:
 
 Utilize the drop-down menu to select a demographic variable related to NYC High Schools that you're interested in investigating. Select a year from the radio buttons to see data specific to that year.
 
-Hovering your mouse on the map gives you the identifying School District or Zip Code and the associated statistic for High Schools in that regopm, in the given year.
+Hovering your mouse on the map gives you the identifier for each school district or zip code and the associated statistic for High Schools in that region in the given year.
 
 Clicking on a region populates a line graph and table on the right-hand side of the dashboard. The line graph illustrates data for each school in the given region, over all 5 years of data in the dashboard. The table highlights the value of the chosen variable of interest only for each school, only on the year chosen in the radio buttons.
