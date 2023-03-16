@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import geopandas as gpd
 import plotly.express as px
 from dash import Dash, dcc, Input, Output, dash_table
@@ -44,10 +43,10 @@ app.layout = html.Div([
                 dcc.Link(
                     href='https://github.com/rb2661/NYC_Schools'
                 )], style={'font-size': 12}),
-        html.P('You have the option to view NYC by School Districts or Zip Codes'),
-        html.P('Select a demographic (e.g. Graduation Rate) and year to update the map of NYC'),
-        html.P('Demographics include Graduation Rate and student percentages of ethnicities or poverty'),
-        html.P('Click on the map to see data specific to schools in that region'),
+        html.P('You have the option to view NYC by school districts or zip codes. '
+               'Selecting a demographic (e.g. graduation rate) and/or year will also update the map.'),
+        html.P('Demographics include graduation rate and percentages of student ethnicities or poverty.'),
+        html.P('Click on the map to see data specific to schools in that region.'),
 
     ], style={'width': '60%', 'display': 'inline-block', 'font-family': 'Helvetica'}),
 
@@ -73,7 +72,7 @@ app.layout = html.Div([
         html.H2('Selected School District or Zip Code:', style={'textAlign': 'center'}),
         html.H4(id='location_code', style={'textAlign': 'center'}),
         dcc.Graph(id='time-series'),
-        html.P('The table lists the schools\' demographic data for the selected year only', style={'textAlign': 'center'}),
+        html.P('The table lists the schools\' demographic data for the selected graduation year only', style={'textAlign': 'center'}),
         html.H4(id='schools_table')
     ], style={'display': 'inline-block', 'float': 'right', 'width': '40%', 'font-family': 'Helvetica'}),
 
@@ -192,7 +191,7 @@ def time_series_plot(clickData, regions, demographic):
     schools4 = schools3.sort_values(by=['School Name', 'Cohort Year'], ascending=[True, True])
 
     fig = px.line(schools4, x='Cohort Year', y=demographic, color='School Name',
-                  title='School Demographic by Year', markers=True, template='simple_white')
+                  title='School Demographic by Graduating Year', markers=True, template='simple_white')
     fig.update_layout(showlegend=False, title_x=0.5, plot_bgcolor='aliceblue')
     fig.update_yaxes(showgrid=True, gridcolor='lightgray')
     fig.update_xaxes(nticks=5)
